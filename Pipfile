@@ -1,0 +1,21 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[dev-packages]
+pytest = "*"
+pylint = "*"
+black = "*"
+
+[packages]
+arrow = ">=0.15"
+click = ">=7.1"
+requests = ">=2.22"
+pytz = ">=2020.1"
+
+[requires]
+python_version = "3.8"
+
+[pipenv]
+allow_prereleases = true
