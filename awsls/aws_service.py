@@ -5,7 +5,7 @@ from time import sleep
 from awsls import conf
 
 class AWSService:
-    wait_time = 0
+    wait_time = 1
 
     def __init__(self, session, name, region):
         self.session = session
@@ -20,23 +20,40 @@ class AWSService:
             If the method require any parameter empty dict is returned
         """
         method_response = dict()
+        print(method_name)
         try:
-            if wait_time > 0:
+            if AWSService.wait_time > 1:
                 sleep(wait_time)
             method_response = getattr(self.client, method_name)()
             method_response.pop('ResponseMetadata', None)
         except botocore.exceptions.ParamValidationError as error:
             # TODO: collect methods with this error to skip them next time
-            methods_required_params.append(method_name)
+            print(f"{self.name}.{method_name} : ParamValidationError")
+            self.methods_required_params.append(method_name)
 
         except botocore.exceptions.ClientError as error:
             if error.response['Error']['Code'] == 'LimitExceededException':
                 AWSService.wait_time *= 2
-            else:
-                raise error
+                print(f"{self.name} : LimitExceededException. Waittime: {AWSService.wait_time}")
+        except botocore.exceptions.InvalidClientTokenId as error:
+                print(f"{self.name} : Invalid Token. Please verify")
+
+        # except Exception as err:
+        #     print('Error Message: {}, err: {}'.format(err.response['Error']['Message'], err))
+
 
         return method_response
-        
+
+
+    def collect_detailed_methods(self):
+        service_details = dict()
+        for d_method in self.details_methods:
+            m_response = self.__get_method_response(d_method)
+            if m_response:
+                service_details[d_method] = m_response
+        print(type(service_details))
+        return service_details
+
 
     def get_service_regions(self) -> list:
         """Return list of all regions the service works in them"""
