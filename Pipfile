@@ -13,6 +13,7 @@ arrow = ">=0.15"
 click = ">=7.1"
 requests = ">=2.22"
 pytz = ">=2020.1"
+boto3 = "*"
 
 [requires]
 python_version = "3.8"
