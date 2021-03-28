@@ -33,7 +33,7 @@
 ## __TODO__ :
 |ToDo|Status|
 | :- | :-: |
-| Code| InProgress|
+| Code| Done|
 | Pagination| -|
 | Async| -|
 | API Throttling| -|
